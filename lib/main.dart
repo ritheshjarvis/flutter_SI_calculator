@@ -133,7 +133,11 @@ class _SIFormState extends State<SIForm> {
                         color: Theme.of(context).primaryColorDark,
                         textColor: Theme.of(context).primaryColorLight,
                         child: Text("Reset", textScaleFactor: 1.5),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            reset();
+                          });
+                        },
                       ),
                     )
                   ],
@@ -168,9 +172,17 @@ class _SIFormState extends State<SIForm> {
     double principal = double.parse(principalController.text);
     String pri = principalController.text;
     debugPrint(pri);
-    double intrest = double.parse(intrestController.text);
+    double interest = double.parse(intrestController.text);
     double time = double.parse(timeController.text);
-    double simple_intrest = (principal*time*intrest)/100;
-    return "The Simple Intrest $simple_intrest";
+    double simpleInterest = (principal*time*interest)/100;
+    return "The Simple Interest: $simpleInterest $_new_dropdown_selected_value";
+  }
+
+  void reset() {
+    principalController.text = '';
+    intrestController.text = '';
+    timeController.text = '';
+    _new_dropdown_selected_value = _currencies[0];
+    simple_intrest_value = '';
   }
 }
