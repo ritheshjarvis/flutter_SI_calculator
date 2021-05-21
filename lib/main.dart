@@ -9,8 +9,7 @@ void main() {
       theme: ThemeData(
           primaryColor: Colors.indigo,
           accentColor: Colors.indigoAccent,
-          brightness: Brightness.dark
-      ),
+          brightness: Brightness.dark),
     ),
   );
 }
@@ -25,6 +24,14 @@ class SIForm extends StatefulWidget {
 class _SIFormState extends State<SIForm> {
   var _currencies = ['Rupees', 'Dollar', 'Pound'];
   final _minimumPadding = 5.0;
+
+  // ignore: non_constant_identifier_names
+  var _new_dropdown_selected_value = 'Rupees';
+  var simple_intrest_value = "";
+
+  TextEditingController principalController = TextEditingController();
+  TextEditingController intrestController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +49,7 @@ class _SIFormState extends State<SIForm> {
             Padding(
                 padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
                 child: TextField(
+                  controller: principalController,
                   // style: textStyle,
                   decoration: InputDecoration(
                       labelText: "Principal",
@@ -54,6 +62,7 @@ class _SIFormState extends State<SIForm> {
             Padding(
                 padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
                 child: TextField(
+                  controller: intrestController,
                   decoration: InputDecoration(
                       labelText: "Rate of Intrest",
                       labelStyle: textStyle,
@@ -68,6 +77,7 @@ class _SIFormState extends State<SIForm> {
                   children: [
                     Expanded(
                         child: TextField(
+                      controller: timeController,
                       decoration: InputDecoration(
                           labelText: "Term",
                           hintText: "Enter time",
@@ -87,9 +97,11 @@ class _SIFormState extends State<SIForm> {
                           child: Text(value),
                         );
                       }).toList(),
-                      value: 'Rupees',
+                      value: _new_dropdown_selected_value,
                       onChanged: (String newValueSelected) {
-                        //
+                        setState(() {
+                          _new_dropdown_selected_value = newValueSelected;
+                        });
                       },
                     ))
                   ],
@@ -106,7 +118,11 @@ class _SIFormState extends State<SIForm> {
                           "Calculate",
                           textScaleFactor: 1.5,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            simple_intrest_value = calculateSimpleIntrest();
+                          });
+                        },
                       ),
                     ),
                     Container(
@@ -124,7 +140,11 @@ class _SIFormState extends State<SIForm> {
                 )),
             Padding(
                 padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
-                child: Center(child: Text("Answer",style: textStyle,)))
+                child: Center(
+                    child: Text(
+                      simple_intrest_value,
+                  style: textStyle,
+                )))
           ],
         ),
       ),
@@ -142,5 +162,15 @@ class _SIFormState extends State<SIForm> {
       margin: EdgeInsets.all(_minimumPadding * 10.0),
       child: image,
     );
+  }
+
+  String calculateSimpleIntrest() {
+    double principal = double.parse(principalController.text);
+    String pri = principalController.text;
+    debugPrint(pri);
+    double intrest = double.parse(intrestController.text);
+    double time = double.parse(timeController.text);
+    double simple_intrest = (principal*time*intrest)/100;
+    return "The Simple Intrest $simple_intrest";
   }
 }
