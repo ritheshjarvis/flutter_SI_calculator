@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(
+    MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "A Simple Intrest Calculator Application",
-      home: SIForm()));
+      home: SIForm(),
+      theme: ThemeData(
+          primaryColor: Colors.indigo,
+          accentColor: Colors.indigoAccent,
+          brightness: Brightness.dark),
+    ),
+  );
 }
 
 class SIForm extends StatefulWidget {
