@@ -9,7 +9,8 @@ void main() {
       theme: ThemeData(
           primaryColor: Colors.indigo,
           accentColor: Colors.indigoAccent,
-          brightness: Brightness.dark),
+          brightness: Brightness.dark
+      ),
     ),
   );
 }
@@ -27,6 +28,8 @@ class _SIFormState extends State<SIForm> {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle textStyle = Theme.of(context).textTheme.title;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Simple Interest Calculator"),
@@ -39,8 +42,10 @@ class _SIFormState extends State<SIForm> {
             Padding(
                 padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
                 child: TextField(
+                  // style: textStyle,
                   decoration: InputDecoration(
                       labelText: "Principal",
+                      labelStyle: textStyle,
                       hintText: "Enter the Principal Amount",
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
@@ -51,6 +56,7 @@ class _SIFormState extends State<SIForm> {
                 child: TextField(
                   decoration: InputDecoration(
                       labelText: "Rate of Intrest",
+                      labelStyle: textStyle,
                       hintText: "Enter the Rate of Intrest",
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
@@ -65,6 +71,7 @@ class _SIFormState extends State<SIForm> {
                       decoration: InputDecoration(
                           labelText: "Term",
                           hintText: "Enter time",
+                          labelStyle: textStyle,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
                       keyboardType: TextInputType.number,
@@ -93,7 +100,12 @@ class _SIFormState extends State<SIForm> {
                   children: [
                     Expanded(
                       child: RaisedButton(
-                        child: Text("Calculate"),
+                        color: Theme.of(context).accentColor,
+                        textColor: Theme.of(context).primaryColorDark,
+                        child: Text(
+                          "Calculate",
+                          textScaleFactor: 1.5,
+                        ),
                         onPressed: () {},
                       ),
                     ),
@@ -102,7 +114,9 @@ class _SIFormState extends State<SIForm> {
                     ),
                     Expanded(
                       child: RaisedButton(
-                        child: Text("Reset"),
+                        color: Theme.of(context).primaryColorDark,
+                        textColor: Theme.of(context).primaryColorLight,
+                        child: Text("Reset", textScaleFactor: 1.5),
                         onPressed: () {},
                       ),
                     )
@@ -110,7 +124,7 @@ class _SIFormState extends State<SIForm> {
                 )),
             Padding(
                 padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
-                child: Center(child: Text("Answer")))
+                child: Center(child: Text("Answer",style: textStyle,)))
           ],
         ),
       ),
