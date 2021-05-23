@@ -29,6 +29,8 @@ class _SIFormState extends State<SIForm> {
   var _new_dropdown_selected_value = 'Rupees';
   var simple_intrest_value = "";
 
+  var _formKey = GlobalKey<FormState>();
+
   TextEditingController principalController = TextEditingController();
   TextEditingController intrestController = TextEditingController();
   TextEditingController timeController = TextEditingController();
@@ -41,116 +43,148 @@ class _SIFormState extends State<SIForm> {
       appBar: AppBar(
         title: Text("Simple Interest Calculator"),
       ),
-      body: Container(
-        margin: EdgeInsets.all(_minimumPadding * 2.0),
-        child: ListView(
-          children: [
-            getAssetImage(),
-            Padding(
-                padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
-                child: TextField(
-                  controller: principalController,
-                  // style: textStyle,
-                  decoration: InputDecoration(
-                      labelText: "Principal",
-                      labelStyle: textStyle,
-                      hintText: "Enter the Principal Amount",
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0))),
-                  keyboardType: TextInputType.number,
-                )),
-            Padding(
-                padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
-                child: TextField(
-                  controller: intrestController,
-                  decoration: InputDecoration(
-                      labelText: "Rate of Intrest",
-                      labelStyle: textStyle,
-                      hintText: "Enter the Rate of Intrest",
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0))),
-                  keyboardType: TextInputType.number,
-                )),
-            Padding(
-                padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: TextField(
-                      controller: timeController,
+      body: Form(
+        key: _formKey,
+        child: Padding(
+            padding: EdgeInsets.all(_minimumPadding * 2.0),
+            child: ListView(
+              children: [
+                getAssetImage(),
+                Padding(
+                    padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
+                    child: TextFormField(
+                      controller: principalController,
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return "Please enter Principal Amount";
+                        }
+                      },
+                      // style: textStyle,
                       decoration: InputDecoration(
-                          labelText: "Term",
-                          hintText: "Enter time",
+                          errorStyle: TextStyle(
+                              color: Colors.yellowAccent, fontSize: 15.0),
+                          labelText: "Principal",
                           labelStyle: textStyle,
+                          hintText: "Enter the Principal Amount",
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
                       keyboardType: TextInputType.number,
                     )),
-                    Container(
-                      width: _minimumPadding * 3.0,
-                    ),
-                    Expanded(
-                        child: DropdownButton(
-                      items: _currencies.map((String value) {
-                        return DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      value: _new_dropdown_selected_value,
-                      onChanged: (String newValueSelected) {
-                        setState(() {
-                          _new_dropdown_selected_value = newValueSelected;
-                        });
+                Padding(
+                    padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
+                    child: TextFormField(
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return "Please Enter Rate of Interest";
+                        }
                       },
-                    ))
-                  ],
-                )),
-            Padding(
-                padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: RaisedButton(
-                        color: Theme.of(context).accentColor,
-                        textColor: Theme.of(context).primaryColorDark,
-                        child: Text(
-                          "Calculate",
-                          textScaleFactor: 1.5,
+                      controller: intrestController,
+                      decoration: InputDecoration(
+                          errorStyle: TextStyle(
+                              fontSize: 15.0, color: Colors.yellowAccent),
+                          labelText: "Rate of Intrest",
+                          labelStyle: textStyle,
+                          hintText: "Enter the Rate of Intrest",
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+                      keyboardType: TextInputType.number,
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: TextFormField(
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return "Enter Term";
+                            }
+                            else if(value == "0"){
+                              return "Minimum term is 1";
+                            }
+                            else if(value.){
+                              return "Minimum term is 1";
+                            }
+                          },
+                          controller: timeController,
+                          decoration: InputDecoration(
+                              errorStyle: TextStyle(
+                                  fontSize: 15.0, color: Colors.yellowAccent),
+                              labelText: "Term",
+                              hintText: "Enter time",
+                              labelStyle: textStyle,
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5.0))),
+                          keyboardType: TextInputType.number,
+                        )),
+                        Container(
+                          width: _minimumPadding * 3.0,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            simple_intrest_value = calculateSimpleIntrest();
-                          });
-                        },
-                      ),
-                    ),
-                    Container(
-                      width: _minimumPadding * 3.0,
-                    ),
-                    Expanded(
-                      child: RaisedButton(
-                        color: Theme.of(context).primaryColorDark,
-                        textColor: Theme.of(context).primaryColorLight,
-                        child: Text("Reset", textScaleFactor: 1.5),
-                        onPressed: () {
-                          setState(() {
-                            reset();
-                          });
-                        },
-                      ),
-                    )
-                  ],
-                )),
-            Padding(
-                padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
-                child: Center(
-                    child: Text(
+                        Expanded(
+                            child: DropdownButton(
+                          items: _currencies.map((String value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          value: _new_dropdown_selected_value,
+                          onChanged: (String newValueSelected) {
+                            setState(() {
+                              _new_dropdown_selected_value = newValueSelected;
+                            });
+                          },
+                        ))
+                      ],
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: RaisedButton(
+                            color: Theme.of(context).accentColor,
+                            textColor: Theme.of(context).primaryColorDark,
+                            child: Text(
+                              "Calculate",
+                              textScaleFactor: 1.5,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                if (_formKey.currentState.validate()) {
+                                  simple_intrest_value =
+                                      calculateSimpleIntrest();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                        Container(
+                          width: _minimumPadding * 3.0,
+                        ),
+                        Expanded(
+                          child: RaisedButton(
+                            color: Theme.of(context).primaryColorDark,
+                            textColor: Theme.of(context).primaryColorLight,
+                            child: Text("Reset", textScaleFactor: 1.5),
+                            onPressed: () {
+                              setState(() {
+                                reset();
+                              });
+                            },
+                          ),
+                        )
+                      ],
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(bottom: _minimumPadding * 2.0),
+                    child: Center(
+                        child: Text(
                       simple_intrest_value,
-                  style: textStyle,
-                )))
-          ],
-        ),
+                      style: textStyle,
+                    )))
+              ],
+            )),
       ),
     );
   }
@@ -174,7 +208,7 @@ class _SIFormState extends State<SIForm> {
     debugPrint(pri);
     double interest = double.parse(intrestController.text);
     double time = double.parse(timeController.text);
-    double simpleInterest = (principal*time*interest)/100;
+    double simpleInterest = (principal * time * interest) / 100;
     return "The Simple Interest: $simpleInterest $_new_dropdown_selected_value";
   }
 
