@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(
@@ -95,28 +96,28 @@ class _SIFormState extends State<SIForm> {
                       children: [
                         Expanded(
                             child: TextFormField(
-                          validator: (String value) {
-                            if (value.isEmpty) {
-                              return "Enter Term";
-                            }
-                            else if(value == "0"){
-                              return "Minimum term is 1";
-                            }
-                            else if(value.){
-                              return "Minimum term is 1";
-                            }
-                          },
-                          controller: timeController,
-                          decoration: InputDecoration(
-                              errorStyle: TextStyle(
-                                  fontSize: 15.0, color: Colors.yellowAccent),
-                              labelText: "Term",
-                              hintText: "Enter time",
-                              labelStyle: textStyle,
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5.0))),
-                          keyboardType: TextInputType.number,
-                        )),
+                                validator: (String value) {
+                                  if (value.isEmpty) {
+                                    return "Enter Term";
+                                  } else if (double.parse(value) < 1.0) {
+                                    return "Minimum term is 1 year";
+                                  }
+                                },
+                                controller: timeController,
+                                decoration: InputDecoration(
+                                    errorStyle: TextStyle(
+                                        fontSize: 15.0,
+                                        color: Colors.yellowAccent),
+                                    labelText: "Term",
+                                    hintText: "Enter time",
+                                    labelStyle: textStyle,
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0))),
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                              WhitelistingTextInputFormatter.digitsOnly
+                            ])),
                         Container(
                           width: _minimumPadding * 3.0,
                         ),
